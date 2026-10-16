@@ -1,44 +1,52 @@
 package com.fuyangyi;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping(value = "/students", produces = "application/json;charset=UTF-8")
 public class StudentController {
 
-    private StudentDao dao = new StudentDao();
+    @Autowired
+    private StudentRepository repo;
 
-    // 查所有学生
     @GetMapping
-    public List<Student> list() throws Exception {
-        return dao.findAll();
+    public List<Student> list() {
+        return repo.findAll();
     }
 
-    // 按学号查
     @GetMapping("/{id}")
-    public Student getById(@PathVariable String id) throws Exception {
-        return dao.findById(id);
+    public Student getById(@PathVariable String id) {
+        return repo.findById(id).orElse(null);
     }
 
-    // 添加
     @PostMapping
-    public String add(@RequestBody Student student) throws Exception {
-        if (dao.existsById(student.getId())) {
+    public String add(@RequestBody Student student) {
+        if (repo.existsById(student.getId())) {
             return "学号已存在";
         }
-        dao.add(student);
+        repo.save(student);
         return "添加成功";
     }
 
-    // 删除
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable String id) throws Exception {
-        if (!dao.existsById(id)) {
+    @PutMapping("/{id}")
+    public String update(@PathVariable String id, @RequestBody Student student) {
+        if (!repo.existsById(id)) {
             return "未找到";
         }
-        dao.deleteById(id);
+        student.setId(id);
+        repo.save(student);
+        return "修改成功";
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable String id) {
+        if (!repo.existsById(id)) {
+            return "未找到";
+        }
+        repo.deleteById(id);
         return "删除成功";
     }
 }
