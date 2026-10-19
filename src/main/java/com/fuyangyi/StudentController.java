@@ -10,43 +10,43 @@ import java.util.List;
 public class StudentController {
 
     @Autowired
-    private StudentRepository repo;
+    private StudentService service;          // ← 改成 service
 
     @GetMapping
     public List<Student> list() {
-        return repo.findAll();
+        return service.findAll();            // ← repo 改成 service
     }
 
     @GetMapping("/{id}")
     public Student getById(@PathVariable String id) {
-        return repo.findById(id).orElse(null);
+        return service.findById(id);         // ← repo 改成 service
     }
 
     @PostMapping
     public String add(@RequestBody Student student) {
-        if (repo.existsById(student.getId())) {
+        if (service.existsById(student.getId())) {   // ← repo 改成 service
             return "学号已存在";
         }
-        repo.save(student);
+        service.save(student);                       // ← repo 改成 service
         return "添加成功";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable String id, @RequestBody Student student) {
-        if (!repo.existsById(id)) {
+        if (!service.existsById(id)) {               // ← repo 改成 service
             return "未找到";
         }
         student.setId(id);
-        repo.save(student);
+        service.save(student);                       // ← repo 改成 service
         return "修改成功";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable String id) {
-        if (!repo.existsById(id)) {
+        if (!service.existsById(id)) {               // ← repo 改成 service
             return "未找到";
         }
-        repo.deleteById(id);
+        service.deleteById(id);                      // ← repo 改成 service
         return "删除成功";
     }
 }
