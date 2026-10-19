@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>学生管理系统</title>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: 40px auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background: #f0f0f0; }
+    form { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 5px; }
+    input { margin: 5px; padding: 5px; }
+    button { padding: 5px 10px; margin: 2px; cursor: pointer; }
+    .del-btn { background: #ff4d4d; color: white; border: none; border-radius: 3px; }
+    .add-btn { background: #4CAF50; color: white; border: none; border-radius: 3px; }
+  </style>
+</head>
+<body>
+<h1>学生管理系统</h1>
+
+<form id="addForm">
+  <input type="text" id="id" placeholder="学号" required>
+  <input type="text" id="name" placeholder="姓名" required>
+  <input type="number" id="age" placeholder="年龄" required>
+  <input type="number" id="score" placeholder="成绩" required>
+  <button type="submit" class="add-btn">添加学生</button>
+</form>
+
+<button onclick="loadStudents()">刷新列表</button>
+
+<table>
+  <thead>
+  <tr>
+    <th>学号</th>
+    <th>姓名</th>
+    <th>年龄</th>
+    <th>成绩</th>
+    <th>操作</th>
+  </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<script>
+  // 加载所有学生
+  async function loadStudents() {
+    const res = await fetch('/students');
+    const json = await res.json();
+    const tbody = document.getElementById('tbody');
+    tbody.innerHTML = '';
+
+    if (json.code !== 200) {
+      alert(json.message);
+      return;
+    }
+
+    json.data.forEach(s => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+                    <td>${s.id}</td>
+                    <td>${s.name}</td>
+                    <td>${s.age}</td>
+                    <td>${s.score}</td>
+                    <td><button class="del-btn" onclick="deleteStudent('${s.id}')">删除</button></td>
+                `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // 添加学生
+  document.getElementById('addForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const student = {
+      id: document.getElementById('id').value,
+      name: document.getElementById('name').value,
+      age: parseInt(document.getElementById('age').value),
+      score: parseInt(document.getElementById('score').value)
+    };
+
+    const res = await fetch('/students', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(student)
+    });
+    const json = await res.json();
+
+    if (json.code === 200) {
+      alert('添加成功');
+      document.getElementById('addForm').reset();
+      loadStudents();
+    } else {
+      alert(json.message);
+    }
+  });
+
+  // 删除学生
+  async function deleteStudent(id) {
+    if (!confirm('确定删除学号 ' + id + ' 的学生吗？')) return;
+
+    const res = await fetch('/students/' + id, { method: 'DELETE' });
+    const json = await res.json();
+
+    if (json.code === 200) {
+      loadStudents();
+    } else {
+      alert(json.message);
+    }
+  }
+
+  // 页面加载时自动加载学生
+  loadStudents();
+</script>
+</body>
+</html>
