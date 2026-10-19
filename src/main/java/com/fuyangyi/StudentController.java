@@ -10,43 +10,33 @@ import java.util.List;
 public class StudentController {
 
     @Autowired
-    private StudentService service;          // ← 改成 service
+    private StudentService service;
 
     @GetMapping
-    public List<Student> list() {
-        return service.findAll();            // ← repo 改成 service
+    public Result<List<Student>> list() {
+        return Result.success(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public Student getById(@PathVariable String id) {
-        return service.findById(id);         // ← repo 改成 service
+    public Result<Student> getById(@PathVariable String id) {
+        return Result.success(service.findById(id));
     }
 
     @PostMapping
-    public String add(@RequestBody Student student) {
-        if (service.existsById(student.getId())) {   // ← repo 改成 service
-            return "学号已存在";
-        }
-        service.save(student);                       // ← repo 改成 service
-        return "添加成功";
+    public Result<Void> add(@RequestBody Student student) {
+        service.add(student);
+        return Result.success("添加成功", null);
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable String id, @RequestBody Student student) {
-        if (!service.existsById(id)) {               // ← repo 改成 service
-            return "未找到";
-        }
-        student.setId(id);
-        service.save(student);                       // ← repo 改成 service
-        return "修改成功";
+    public Result<Void> update(@PathVariable String id, @RequestBody Student student) {
+        service.update(id, student);
+        return Result.success("修改成功", null);
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable String id) {
-        if (!service.existsById(id)) {               // ← repo 改成 service
-            return "未找到";
-        }
-        service.deleteById(id);                      // ← repo 改成 service
-        return "删除成功";
+    public Result<Void> delete(@PathVariable String id) {
+        service.delete(id);
+        return Result.success("删除成功", null);
     }
 }
