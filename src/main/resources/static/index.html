@@ -2,47 +2,218 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>学生管理系统</title>
   <style>
-    body { font-family: Arial; max-width: 800px; margin: 40px auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-    th { background: #f0f0f0; }
-    form { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 5px; }
-    input { margin: 5px; padding: 5px; }
-    button { padding: 5px 10px; margin: 2px; cursor: pointer; }
-    .del-btn { background: #ff4d4d; color: white; border: none; border-radius: 3px; }
-    .add-btn { background: #4CAF50; color: white; border: none; border-radius: 3px; }
+    /* 清除默认边距 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+
+    /* 顶部导航栏 */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #2c3e50;
+      color: white;
+      padding: 15px 30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .navbar .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .navbar .nav-links a {
+      color: #ecf0f1;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+    }
+
+    .navbar .nav-links a:hover {
+      color: #3498db;
+    }
+
+    /* 主体内容 */
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    /* 表单区域 */
+    .form-box {
+      display: flex;
+      gap: 10px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .form-box input {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      flex: 1;
+      min-width: 100px;
+      font-size: 14px;
+    }
+
+    .form-box input:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 5px rgba(52,152,219,0.3);
+    }
+
+    .btn-add {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    .btn-add:hover {
+      background-color: #2980b9;
+    }
+
+    /* 操作栏 */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .action-bar button {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .action-bar button:hover {
+      background: #f0f0f0;
+    }
+
+    /* 表格 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    th {
+      background: #ecf0f1;
+      color: #2c3e50;
+      padding: 15px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    tr:hover {
+      background: #f8f9fa;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .btn-del {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .btn-del:hover {
+      background: #c0392b;
+    }
+
+    .empty {
+      text-align: center;
+      color: #999;
+      padding: 30px;
+    }
   </style>
 </head>
 <body>
-<h1>学生管理系统</h1>
 
-<form id="addForm">
-  <input type="text" id="id" placeholder="学号" required>
-  <input type="text" id="name" placeholder="姓名" required>
-  <input type="number" id="age" placeholder="年龄" required>
-  <input type="number" id="score" placeholder="成绩" required>
-  <button type="submit" class="add-btn">添加学生</button>
-</form>
+<!-- 顶部导航 -->
+<div class="navbar">
+  <div class="logo">学生管理系统</div>
+  <div class="nav-links">
+    <a href="#">首页</a>
+    <a href="#">关于</a>
+  </div>
+</div>
 
-<button onclick="loadStudents()">刷新列表</button>
+<!-- 主体 -->
+<div class="container">
 
-<table>
-  <thead>
-  <tr>
-    <th>学号</th>
-    <th>姓名</th>
-    <th>年龄</th>
-    <th>成绩</th>
-    <th>操作</th>
-  </tr>
-  </thead>
-  <tbody id="tbody"></tbody>
-</table>
+  <!-- 添加表单 -->
+  <form id="addForm" class="form-box">
+    <input type="text" id="id" placeholder="学号" required>
+    <input type="text" id="name" placeholder="姓名" required>
+    <input type="number" id="age" placeholder="年龄" required>
+    <input type="number" id="score" placeholder="成绩" required>
+    <button type="submit" class="btn-add">+ 添加学生</button>
+  </form>
+
+  <!-- 操作栏 -->
+  <div class="action-bar">
+    <h3>学生列表</h3>
+    <button onclick="loadStudents()">刷新列表</button>
+  </div>
+
+  <!-- 表格 -->
+  <table>
+    <thead>
+    <tr>
+      <th>学号</th>
+      <th>姓名</th>
+      <th>年龄</th>
+      <th>成绩</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
 
 <script>
-  // 加载所有学生
   async function loadStudents() {
     const res = await fetch('/students');
     const json = await res.json();
@@ -54,6 +225,11 @@
       return;
     }
 
+    if (json.data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty">暂无学生数据</td></tr>';
+      return;
+    }
+
     json.data.forEach(s => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -61,13 +237,12 @@
                     <td>${s.name}</td>
                     <td>${s.age}</td>
                     <td>${s.score}</td>
-                    <td><button class="del-btn" onclick="deleteStudent('${s.id}')">删除</button></td>
+                    <td><button class="btn-del" onclick="deleteStudent('${s.id}')">删除</button></td>
                 `;
       tbody.appendChild(tr);
     });
   }
 
-  // 添加学生
   document.getElementById('addForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const student = {
@@ -93,7 +268,6 @@
     }
   });
 
-  // 删除学生
   async function deleteStudent(id) {
     if (!confirm('确定删除学号 ' + id + ' 的学生吗？')) return;
 
@@ -107,7 +281,6 @@
     }
   }
 
-  // 页面加载时自动加载学生
   loadStudents();
 </script>
 </body>
