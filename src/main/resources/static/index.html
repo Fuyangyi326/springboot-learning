@@ -5,168 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>学生管理系统</title>
   <style>
-    /* 清除默认边距 */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
-      background-color: #f5f7fa;
-      color: #333;
-    }
+    /* 基础重置 */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; background-color: #f5f7fa; color: #333; }
 
     /* 顶部导航栏 */
     .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #2c3e50;
-      color: white;
-      padding: 15px 30px;
+      display: flex; justify-content: space-between; align-items: center;
+      background-color: #2c3e50; color: white; padding: 15px 30px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-
-    .navbar .logo {
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .navbar .nav-links a {
-      color: #ecf0f1;
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 14px;
-    }
-
-    .navbar .nav-links a:hover {
-      color: #3498db;
-    }
+    .navbar .logo { font-size: 22px; font-weight: bold; }
+    .navbar .nav-links a { color: #ecf0f1; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .navbar .nav-links a:hover { color: #3498db; }
 
     /* 主体内容 */
-    .container {
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
+    .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
 
     /* 表单区域 */
     .form-box {
-      display: flex;
-      gap: 10px;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      display: flex; gap: 10px; background: white; padding: 20px;
+      border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; flex-wrap: wrap;
     }
-
     .form-box input {
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      flex: 1;
-      min-width: 100px;
-      font-size: 14px;
+      padding: 10px; border: 1px solid #ddd; border-radius: 5px;
+      flex: 1; min-width: 100px; font-size: 14px;
     }
-
-    .form-box input:focus {
-      outline: none;
-      border-color: #3498db;
-      box-shadow: 0 0 5px rgba(52,152,219,0.3);
-    }
-
+    .form-box input:focus { outline: none; border-color: #3498db; box-shadow: 0 0 5px rgba(52,152,219,0.3); }
     .btn-add {
-      background-color: #3498db;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.3s;
+      background-color: #3498db; color: white; border: none;
+      padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; transition: background 0.3s;
     }
-
-    .btn-add:hover {
-      background-color: #2980b9;
-    }
+    .btn-add:hover { background-color: #2980b9; }
 
     /* 操作栏 */
-    .action-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
+    .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
     .action-bar button {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 8px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.3s;
+      background: white; border: 1px solid #ddd; padding: 8px 15px;
+      border-radius: 5px; cursor: pointer; font-size: 14px; transition: all 0.3s;
     }
-
-    .action-bar button:hover {
-      background: #f0f0f0;
-    }
+    .action-bar button:hover { background: #f0f0f0; }
 
     /* 表格 */
     table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      width: 100%; border-collapse: collapse; background: white;
+      border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
+    th { background: #ecf0f1; color: #2c3e50; padding: 15px; text-align: left; font-size: 14px; }
+    td { padding: 15px; border-bottom: 1px solid #eee; font-size: 14px; }
+    tr:hover { background: #f8f9fa; }
+    tr:last-child td { border-bottom: none; }
 
-    th {
-      background: #ecf0f1;
-      color: #2c3e50;
-      padding: 15px;
-      text-align: left;
-      font-size: 14px;
-    }
+    /* 按钮样式 */
+    .btn-del { background: #e74c3c; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-size: 13px; }
+    .btn-del:hover { background: #c0392b; }
 
-    td {
-      padding: 15px;
-      border-bottom: 1px solid #eee;
-      font-size: 14px;
-    }
+    .edit-btn { background: #3498db; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-size: 13px; margin-right: 5px; }
+    .edit-btn:hover { background: #2980b9; }
 
-    tr:hover {
-      background: #f8f9fa;
-    }
+    .empty { text-align: center; color: #999; padding: 30px; }
 
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .btn-del {
-      background: #e74c3c;
-      color: white;
-      border: none;
-      padding: 5px 12px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .btn-del:hover {
-      background: #c0392b;
-    }
-
-    .empty {
-      text-align: center;
-      color: #999;
-      padding: 30px;
-    }
+    /* 模态框 (弹窗) */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+    .modal-content { background: white; margin: 100px auto; padding: 30px; border-radius: 8px; width: 400px; max-width: 90%; }
+    .modal-content h3 { margin-bottom: 20px; color: #2c3e50; }
+    .modal-content p { margin-bottom: 15px; }
+    .modal-content label { display: inline-block; width: 60px; }
+    .modal-content input { padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 250px; }
+    .modal-btns { margin-top: 20px; text-align: right; }
+    .modal-btns button { margin-left: 10px; padding: 8px 15px; border-radius: 5px; border: 1px solid #ddd; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -213,7 +120,32 @@
   </table>
 </div>
 
+<!-- 编辑学生模态框 (默认隐藏) -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h3>编辑学生信息</h3>
+    <input type="hidden" id="editId"> <!-- 隐藏域，用来存学号 -->
+    <p>
+      <label>姓名：</label>
+      <input type="text" id="editName">
+    </p>
+    <p>
+      <label>年龄：</label>
+      <input type="number" id="editAge">
+    </p>
+    <p>
+      <label>成绩：</label>
+      <input type="number" id="editScore">
+    </p>
+    <div class="modal-btns">
+      <button type="button" onclick="closeModal()">取消</button>
+      <button type="button" class="btn-add" onclick="submitEdit()">保存</button>
+    </div>
+  </div>
+</div>
+
 <script>
+  // 1. 加载所有学生
   async function loadStudents() {
     const res = await fetch('/students');
     const json = await res.json();
@@ -237,12 +169,16 @@
                     <td>${s.name}</td>
                     <td>${s.age}</td>
                     <td>${s.score}</td>
-                    <td><button class="btn-del" onclick="deleteStudent('${s.id}')">删除</button></td>
+                    <td>
+                        <button class="edit-btn" onclick="openEditModal('${s.id}', '${s.name}', ${s.age}, ${s.score})">编辑</button>
+                        <button class="btn-del" onclick="deleteStudent('${s.id}')">删除</button>
+                    </td>
                 `;
       tbody.appendChild(tr);
     });
   }
 
+  // 2. 添加学生
   document.getElementById('addForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const student = {
@@ -268,12 +204,11 @@
     }
   });
 
+  // 3. 删除学生
   async function deleteStudent(id) {
     if (!confirm('确定删除学号 ' + id + ' 的学生吗？')) return;
-
     const res = await fetch('/students/' + id, { method: 'DELETE' });
     const json = await res.json();
-
     if (json.code === 200) {
       loadStudents();
     } else {
@@ -281,6 +216,46 @@
     }
   }
 
+  // 4. 打开编辑模态框
+  function openEditModal(id, name, age, score) {
+    document.getElementById('editId').value = id;
+    document.getElementById('editName').value = name;
+    document.getElementById('editAge').value = age;
+    document.getElementById('editScore').value = score;
+    document.getElementById('editModal').style.display = 'block';
+  }
+
+  // 5. 关闭模态框
+  function closeModal() {
+    document.getElementById('editModal').style.display = 'none';
+  }
+
+  // 6. 提交编辑保存
+  async function submitEdit() {
+    const id = document.getElementById('editId').value;
+    const student = {
+      name: document.getElementById('editName').value,
+      age: parseInt(document.getElementById('editAge').value),
+      score: parseInt(document.getElementById('editScore').value)
+    };
+
+    const res = await fetch('/students/' + id, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(student)
+    });
+    const json = await res.json();
+
+    if (json.code === 200) {
+      alert('修改成功');
+      closeModal();
+      loadStudents(); // 刷新列表
+    } else {
+      alert(json.message);
+    }
+  }
+
+  // 页面加载完成后，自动加载学生列表
   loadStudents();
 </script>
 </body>
